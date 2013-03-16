@@ -1,24 +1,11 @@
 """
-    *******************************************************************************
-    * Copyright 2009 Rafael Marques Martins
-    *
-    * This file is part of TimeSlice python module.
-    * 
-    * TimeSlice is free software; you can redistribute it and/or modify
-    * it under the terms of the GNU General Public License as published by
-    * the Free Software Foundation; either version 2 of the License, or
-    * (at your option) any later version.
-    * 
-    * TimeSlice is distributed in the hope that it will be useful,
-    * but WITHOUT ANY WARRANTY; without even the implied warranty of
-    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    * GNU General Public License for more details.
-    * 
-    * You should have received a copy of the GNU General Public License
-    * along with Foobar; if not, write to the Free Software
-    * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-    * 
-    *******************************************************************************/
+Copyright (c) 2009 Rafael Marques Martins
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
 import datetime
@@ -125,7 +112,7 @@ class TimeSlice:
 
         s2 = timeSlice.start
         e2 = timeSlice.end
-        
+
         if e1 < s2 or e2 < s1:
             return None
 
@@ -161,7 +148,7 @@ class TimeSlice:
                 s2 = intersection.end
                 e2 = self.end
                 return TimeSet( [ TimeSlice( s1, e1 ), TimeSlice( s2, e2 ) ] )
- 
+
             if absolute and intersection.start > timeSlice.start and intersection.end < timeSlice.end:
                 s1 = timeSlice.start
                 e1 = intersection.start
@@ -170,11 +157,11 @@ class TimeSlice:
                 e2 = timeSlice.end
                 return TimeSet( [ TimeSlice( s1, e1 ), TimeSlice( s2, e2 ) ] )
 
-                
+
             if intersection == self:
                 return TimeSet()
 
-           
+
             if intersection.start == self.start:
                 s1 = intersection.end
                 e1 = self.end
@@ -206,7 +193,7 @@ class TimeSlice:
         if not isinstance( arg, TimeSlice ):
             raise 'Invalid argument type. Expected TimeSlice'
 
-        intersection = self.intersect( arg ) 
+        intersection = self.intersect( arg )
 
         if intersection:
             s1 = min( [ self.start, arg.start ] )
@@ -216,7 +203,7 @@ class TimeSlice:
             e2 = max( [ self.end, arg.end ] )
 
             return TimeSet( [ TimeSlice( s1, e2 ) ] )
-           
+
         return TimeSet( [ self, arg ] )
 
     #def __radd__( self, arg ):
@@ -247,18 +234,18 @@ class TimeSet:
             return True
 
         return False
-    
+
     @classmethod
     def fromRange( self, repeat = 1, start = DAYLY, end = None ):
         slices = []
-        
+
         if not ( isinstance( start, datetime.datetime ) ):
             start = datetime.datetime( start.year, start.month, start.day )
 
         if not ( isinstance( end, datetime.datetime ) ):
             end = datetime.datetime( end.year, end.month, end.day )
 
-        
+
         if repeat == DAYLY:
             e = start
             while 1:
@@ -266,7 +253,7 @@ class TimeSet:
                 d1 = datetime.datetime( s.year, s.month, s.day, s.hour, s.minute, s.second ) + datetime.timedelta( 1 )
                 e = datetime.datetime( d1.year, d1.month, d1.day, s.hour, s.minute, s.second )
                 if e < end:
-                    slices.append( TimeSlice( s, e )  ) 
+                    slices.append( TimeSlice( s, e )  )
                 else:
                     break
             return TimeSet( slices )
@@ -280,14 +267,14 @@ class TimeSet:
 
                 e = datetime.datetime( d1.year, d1.month, tmpDay, s.hour, s.minute, s.second )
                 if e <= end:
-                    slices.append( TimeSlice( s, e )  ) 
+                    slices.append( TimeSlice( s, e )  )
                 else:
                     break
             return TimeSet( slices )
 
         elif repeat == YEARLY:
             pass
-        
+
         return []
 
     def max( self ):
@@ -298,7 +285,7 @@ class TimeSet:
 
     def seconds( self ):
         return self.duration()
-    
+
     def duration( self ):
         return sum( [ x.duration() for x in self.slices ] )
 
@@ -342,9 +329,9 @@ class TimeSet:
         i = 0
         while i < len( newTimeSet.slices ):
             slice = newTimeSet[ i ]
-            
+
             intersection = slice.intersect( arg )
-            
+
             if intersection:
                 newTimeSet.slices.remove( slice )
                 i = -1
@@ -354,7 +341,7 @@ class TimeSet:
 
             i += 1
 
-        
+
         newTimeSet.slices.sort( cmp = TimeSet.sliceCmp )
 
         return newTimeSet
@@ -374,7 +361,7 @@ class TimeSet:
             return self.differenceSlice( arg )
 
         raise 'Invalid argument type. Expected TimeSlice or TimeSet'
-        
+
 
     def intersect( self, arg ):
         newTimeSet = TimeSet()
@@ -384,13 +371,13 @@ class TimeSet:
             for slice in arg:
                 intersections.extend( self.intersectSlice( slice ).slices )
             return TimeSet( intersections )
-            
+
         if isinstance( arg, TimeSlice ):
             return self.intersectSlice( arg )
 
         raise 'Invalid argument type. Expected TimeSlice or TimeSet'
 
-    
+
     def addSlice( self, arg ):
         slices = [ arg ]
         i = 0
@@ -406,14 +393,14 @@ class TimeSet:
                         j = len( self.slices )
                 j += 1
             i += 1
-        
+
         newTimeSet = TimeSet()
         newTimeSet.slices.extend( self.slices )
         newTimeSet.slices.extend( slices )
 
         newTimeSet.slices.sort( cmp = TimeSet.sliceCmp )
         return newTimeSet
-           
+
 
 
     def __add__( self, arg ):
@@ -430,7 +417,7 @@ class TimeSet:
             return self.addSlice( arg )
 
         raise 'Invalid argument type. Expected TimeSlice or TimeSet'
-        
+
 
 
     def __repr__( self ):

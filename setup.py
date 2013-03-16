@@ -1,10 +1,10 @@
 from distutils.core import setup
 
 setup(
-    name='TimeSlice',
+    name='timeslice',
     version='1.2',
     author='Rafael Marques Martins',
     author_email='snit.ram@gmail.com',
-    packages=['TimeSlice',],
+    packages=['timeslice',],
     url='http://github.com/snit-ram/timeslice'
 )

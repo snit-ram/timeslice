@@ -1,11 +1,11 @@
-TimeSlice
-=========
+timeslice Module
+================
 Python module to deal with time grids
 
 
 # Importing
 
-    import TimeSlice
+    import timeslice
 
 
 # Module Classes
