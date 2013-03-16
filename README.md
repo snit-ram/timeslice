@@ -12,8 +12,8 @@ Python module to deal with time grids
 
 TimeSlice module contains 2 classes:
 
-  * `TimeSlice.TimeSlice`: represents a range of time.
-  * `TimeSlice.TimeSet`: represents a list of TimeSlices without intersection (Intersections are removed when a TimeSlice is added to a TimeSet.
+  * `timeslice.TimeSlice`: represents a range of time.
+  * `timeslice.TimeSet`: represents a list of TimeSlices without intersection (Intersections are removed when a TimeSlice is added to a TimeSet.
 
 
 
